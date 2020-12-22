@@ -5,6 +5,12 @@
     "jsx": "react",
     "baseUrl": ".",
     "module": "commonjs",
+    "paths": {
+      "Components/*": ["src/components/*"],
+      "Hooks/*": ["src/hooks/*"],
+      "Utils/*": ["src/utils/*"],
+      "Constants/*": ["src/constants/*"]
+    }
   },
   "exclude": ["node_modules", "dist"]
 }

@@ -12,6 +12,15 @@ module.exports = {
       template: './src/index.html',
     }),
   ],
+  resolve: {
+    alias: {
+      Components: path.resolve(__dirname, 'src/components/'),
+      Hooks: path.resolve(__dirname, 'src/hooks/'),
+      Utils: path.resolve(__dirname, 'src/utils/'),
+      Constants: path.resolve(__dirname, 'src/constants/'),
+    },
+    extensions: ['*', '.js', '.jsx', '.tsx', '.ts'],
+  },
   module: {
     rules: [
       {

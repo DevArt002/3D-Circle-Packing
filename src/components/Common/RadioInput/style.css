@@ -1,0 +1,13 @@
+.radio-input,
+.radio-input input {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  margin-bottom: 10px;
+}
+
+.radio-input input {
+  margin: 0 10px 0 10px;
+}

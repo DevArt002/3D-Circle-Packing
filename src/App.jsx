@@ -1,7 +1,9 @@
 import React from 'react'
+// Import custom components
+import Layout from './components/Layout'
 // Import style
 import './App.css'
 
-const App = () => <h1>React App</h1>
+const App = () => <Layout />
 
 export default App

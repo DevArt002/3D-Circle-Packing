@@ -1,0 +1,11 @@
+.check-input,
+.check-input input {
+  cursor: pointer;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  margin-bottom: 10px;
+}
+
+.check-input input {
+  margin: 0 10px 0 10px;
+}

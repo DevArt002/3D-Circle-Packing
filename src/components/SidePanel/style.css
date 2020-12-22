@@ -1,0 +1,74 @@
+.side-panel {
+  position: absolute;
+  left: -300px;
+  bottom: 0px;
+  width: 300px;
+  height: calc(100% - 70px);
+  color: white;
+  background-color: rgba(255, 255, 255, 0.2);
+  transition: left 1s;
+}
+
+/** Open/Close button */
+.side-panel.open {
+  left: 0px;
+}
+
+.side-panel .open-btn,
+.side-panel .close-btn {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  background: none;
+  color: inherit;
+  border: none;
+  outline: none;
+  cursor: pointer;
+}
+
+.side-panel .open-btn:hover,
+.side-panel .close-btn:hover {
+  color: grey;
+}
+
+.side-panel .open-btn {
+  right: -10px;
+  transform: translate(100%, 0px)
+}
+
+/** Settings panel */
+.side-panel .settings {
+  padding: 20px 0 0 10px;
+}
+
+.side-panel .settings .title {
+  font-size: 2rem;
+  text-align: center;
+  margin: 10px
+}
+
+.side-panel .label {
+  margin: 0px 0 10px 0;
+  font-weight: 600;
+  font-size: 1rem;
+}
+
+.side-panel .settings .check-input,
+.side-panel .settings .radio-input,
+.side-panel .settings .slider-input
+ {
+  margin-left: 20px;
+}
+
+.side-panel .inline-block {
+  display: inline-block;
+}
+
+/** Responsiveness */
+@media (max-width: 480px) {
+  .side-panel {
+    left: -100%;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+  }
+}

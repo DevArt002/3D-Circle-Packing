@@ -1,0 +1,13 @@
+.slider-input, .slider-input input {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  margin-bottom: 10px;
+}
+
+.slider-input input {
+  margin: 0 10px 0 10px;
+  width: 200px;
+}
