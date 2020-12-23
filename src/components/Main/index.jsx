@@ -12,10 +12,11 @@ const Main = () => {
   const { data, onDataCountChange } = useData()
   const rendererContainer = useRef()
   const renderer = useRef()
+  const toolTip = useRef()
 
   // Create threejs renderer when component mounted
   useEffect(() => {
-    renderer.current = new ThreeJSRenderer(rendererContainer.current, data, settings)
+    renderer.current = new ThreeJSRenderer(rendererContainer.current, data, settings, onObjSelected)
     renderer.current.init()
     return () => {
       if (renderer.current) {
@@ -23,6 +24,30 @@ const Main = () => {
       }
     }
   }, [])
+
+  // Update settings
+  useEffect(() => {
+    renderer.current.settingsUpdate(settings)
+  }, [settings])
+
+  // Update data
+  useEffect(() => {
+    renderer.current.dataUpdate(data)
+  }, [data])
+
+  // Listener for object selection
+  const onObjSelected = (value = '', mousePos = null) => {
+    if (value) {
+      rendererContainer.current.style.cursor = 'pointer'
+      toolTip.current.style.display = 'flex'
+      toolTip.current.style.top = `${mousePos.y + 20}px`
+      toolTip.current.style.left = `${mousePos.x + 20}px`
+      toolTip.current.innerText = value
+    } else {
+      rendererContainer.current.style.cursor = 'default'
+      toolTip.current.style.display = 'none'
+    }
+  }
 
   return (
     <div className="main">
@@ -35,6 +60,7 @@ const Main = () => {
         onDataCountChange={onDataCountChange}
       />
       <div className="renderer-container" ref={rendererContainer}></div>
+      <div className="tool-tip" ref={toolTip}></div>
     </div>
   )
 }

@@ -1,7 +1,16 @@
 import * as THREE from 'three'
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
+import isEqual from 'lodash/isEqual'
 // Import utils
-import { pickHex, ringLathe, setGradient, getGradientWeight, getLayer, getSigma } from 'Utils/'
+import {
+  pickHex,
+  ringLathe,
+  setGradient,
+  getCanvasRelativePosition,
+  getGradientWeight,
+  getLayer,
+  getSigma,
+} from 'Utils/'
 
 class ThreeJSRenderer {
   constructor(container, data, settings, onObjSelected) {
@@ -204,6 +213,7 @@ class ThreeJSRenderer {
    */
   eventSetup = () => {
     window.addEventListener('resize', this.onWindowResize, false)
+    window.addEventListener('mousemove', this.onMouseMove, false)
   }
 
   /**
@@ -218,6 +228,17 @@ class ThreeJSRenderer {
     this.camera.aspect = this.aspect
 
     this.camera.updateProjectionMatrix()
+  }
+
+  /**
+   * Mousemove event listener
+   */
+  onMouseMove = (e) => {
+    const pos = getCanvasRelativePosition(e, this.renderer.domElement, this.width, this.height) // Adjusted mouse position related to canvas view size
+
+    this.mouse.x = (pos.x / this.width) * 2 - 1
+    this.mouse.y = -(pos.y / this.height) * 2 + 1
+    this.mouseXY = { x: e.x, y: e.y } // Mouse position on screen
   }
 
   /**
@@ -249,10 +270,55 @@ class ThreeJSRenderer {
   }
 
   /**
+   * Settings are updated, and update rendered scene
+   */
+  settingsUpdate = (settings) => {
+    // If settings properties are not changed, just return
+    if (isEqual(this.settings, settings)) return
+
+    const { axis, grid } = settings
+
+    if (this.settings.axis !== axis) {
+      // If axis setting is changed, just update axes
+      this.settings.axis = axis
+      this.axesSetup()
+    } else if (this.settings.grid !== grid) {
+      // If grid setting is changed, just update grid
+      this.settings.grid = grid
+      this.gridSetup()
+    } else {
+      // If any settings except axis&grid, update cylinders
+      this.settings = settings
+      this.cylindersSetup()
+    }
+  }
+
+  /**
+   * Data are updated, and update rendered scene
+   */
+  dataUpdate = (data) => {
+    // If data is not changed, just return
+    if (isEqual(this.data, data)) return
+
+    this.data = data
+    this.cylindersSetup()
+  }
+
+  /**
    * Set dispose flat as true
    */
   dispose = () => {
     this.disposed = true
+  }
+
+  /**
+   * Recover picked object with its original status before the picking
+   */
+  recoverPickedObj = () => {
+    if (this.prevPickedObj) {
+      this.prevPickedObj.material.color.set(this.prevPickedObj.currentColor)
+      this.prevPickedObj = null
+    }
   }
 
   /**
@@ -261,6 +327,24 @@ class ThreeJSRenderer {
   update = () => {
     // Update controls
     this.controls.update()
+
+    // Update ray
+    this.raycaster.setFromCamera(this.mouse, this.camera)
+    // Check intersecting obj
+    const intersects = this.raycaster.intersectObjects(this.scene.children, true)
+    // Recover previous picked object
+    this.recoverPickedObj()
+    if (intersects.length > 0) {
+      const pickedObj = intersects[0].object
+      if (pickedObj.name === 'pickable') {
+        this.prevPickedObj = pickedObj // Save current picked object
+        this.prevPickedObj.currentColor = pickedObj.material.color.clone() // Save its color
+        pickedObj.material.color.set(0x666666) // Change color
+        this.onObjSelected(pickedObj.value, this.mouseXY)
+      }
+    } else {
+      this.onObjSelected()
+    }
   }
 
   /**
@@ -278,6 +362,7 @@ class ThreeJSRenderer {
     if (this.disposed) {
       window.cancelAnimationFrame(this.requestID)
       window.removeEventListener('resize', this.onWindowResize)
+      document.removeEventListener('mousemove', this.onMouseMove)
       return
     }
 

@@ -1,5 +1,19 @@
 import * as THREE from 'three'
 
+// Lathe ring
+const ringLathe = (R, r, h) => {
+  const halfH = h * 0.5
+  const points = [
+    new THREE.Vector2(r, -halfH),
+    new THREE.Vector2(R, -halfH),
+    new THREE.Vector2(R, halfH),
+    new THREE.Vector2(r, halfH),
+    new THREE.Vector2(r, -halfH),
+  ]
+  const g = new THREE.LatheBufferGeometry(points, 72)
+  return g
+}
+
 // Set vertices' gradient colors along axis
 const setGradient = (geometry, colors, axis) => {
   geometry.computeBoundingBox()
@@ -33,18 +47,12 @@ const setGradient = (geometry, colors, axis) => {
   }
 }
 
-// Lathe ring
-const ringLathe = (R, r, h) => {
-  const halfH = h * 0.5
-  const points = [
-    new THREE.Vector2(r, -halfH),
-    new THREE.Vector2(R, -halfH),
-    new THREE.Vector2(R, halfH),
-    new THREE.Vector2(r, halfH),
-    new THREE.Vector2(r, -halfH),
-  ]
-  const g = new THREE.LatheBufferGeometry(points, 72)
-  return g
+const getCanvasRelativePosition = (e, canvas, width, height) => {
+  const rect = canvas.getBoundingClientRect()
+  return {
+    x: ((e.clientX - rect.left) * width) / rect.width,
+    y: ((e.clientY - rect.top) * height) / rect.height,
+  }
 }
 
-export { ringLathe, setGradient }
+export { ringLathe, setGradient, getCanvasRelativePosition }
