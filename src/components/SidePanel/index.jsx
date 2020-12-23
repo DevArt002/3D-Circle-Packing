@@ -87,7 +87,7 @@ const SidePanel = ({
           max={MAX_DATA_COUNT}
           step={DATA_STEP}
           value={data.items.length}
-          onChange={(e) => onDataCountChange(parseInt(e.target.value))}
+          onMouseUp={(e) => onDataCountChange(parseInt(e.target.value))}
         />
         <p className="label">Spacing</p>
         <SliderInput
@@ -97,7 +97,7 @@ const SidePanel = ({
           max={MAX_SPACE}
           step={SPACE_STEP}
           value={settings.space}
-          onChange={(e) => onSettingsChange('space', parseFloat(e.target.value))}
+          onMouseUp={(e) => onSettingsChange('space', parseFloat(e.target.value))}
         />
         <p className="label">Padding</p>
         <SliderInput
@@ -107,7 +107,7 @@ const SidePanel = ({
           max={MAX_PADDING}
           step={PADDING_STEP}
           value={settings.padding}
-          onChange={(e) => onSettingsChange('padding', parseFloat(e.target.value))}
+          onMouseUp={(e) => onSettingsChange('padding', parseFloat(e.target.value))}
         />
       </div>
     </div>

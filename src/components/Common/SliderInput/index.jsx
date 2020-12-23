@@ -2,7 +2,7 @@ import React from 'react'
 // Import style
 import './style.css'
 
-const SliderInput = ({ id, name, value, min, max, step, onChange }) => {
+const SliderInput = ({ id, name, value, min, max, step, onMouseUp }) => {
   return (
     <div className="slider-input">
       <input
@@ -12,8 +12,8 @@ const SliderInput = ({ id, name, value, min, max, step, onChange }) => {
         min={min}
         max={max}
         step={step}
-        value={value}
-        onChange={onChange}
+        defaultValue={value}
+        onMouseUp={onMouseUp}
       />
       {value}
     </div>
